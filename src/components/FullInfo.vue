@@ -2,7 +2,7 @@
   <v-dialog v-model="dialog" persistent>
     <template v-slot:activator="{ on, attrs }">
       <v-btn
-        :style="{ width: '150px' }"
+        
         color="#E53935"
         class="ml-1"
         dark
@@ -14,20 +14,21 @@
       </v-btn>
     </template>
     <v-card min-height="200">
-      <v-container class="d-flex justify-right flex-column" style="text-align: left;">
-        <div class="align-right">
-          <h1>{{ item.name.official }}</h1>
-          <p>Flag: <br> <img :src="item.flags.png" :alt="item.name.official" /></p>
-          <p>CCN3: {{ item.ccn3 }}</p>
-          <p>Region: {{ item.region }}</p>
-          <p>Subregion: {{ item.subregion }}</p>
-          <p>Languages: {{ Object.values(item.languages).join(', ') }}</p>
-          <p>Currencies: {{ Object.keys(item.currencies).join(', ') }}</p>
-          <p>Translations: {{ Object.keys(item.translations).join(', ') }}</p>
-          <p>Borders: {{ item.borders.join(', ') }}</p>
-          <p>timezones: {{ item.timezones.join(', ') }}</p>
-        </div>
-      </v-container>
+    <v-container class="d-flex justify-right flex-column" style="text-align: left;">
+      <div class="align-right">
+        <h1>{{ item.name.official }}</h1>
+        <p>Flag: <br> <img :src="item.flags.png" :alt="item.name.official" /></p>
+        <p>CCN3: {{ item.cca3 }}</p>
+        <p>Region: {{ item.region }}</p>
+        <p>Subregion: {{ item.subregion }}</p>
+        <p>Languages: {{ Object.values(item.languages).join(', ') }}</p>
+        <p>Currencies: {{ Object.keys(item.currencies).join(', ') }}</p>
+        <p>Translations: {{ Object.keys(item.translations).join(', ') }}</p>
+        <p v-if="item.borders && item.borders.length > 0">Borders: {{ item.borders.join(', ') }}</p>
+        <p v-else>No bordering countries</p>
+        <p>Timezones: {{ item.timezones.join(', ') }}</p>
+      </div>
+    </v-container>
       <v-container class="d-flex justify-center flex-column align-center">
         <div class="d-flex mt-4">
           <v-btn
@@ -52,20 +53,12 @@ export default {
     return {
       dialog: false,
       loading: false,
-      target: [],
+      target: null,
     };
   },
-  watch: {
-    dialog(val) {
-      if (!val) {
-        this.target.style.visibility = '';
-      }
-    },
-  },
   methods: {
-    disableButton(event) {
-      this.target = event.currentTarget;
-      event.currentTarget.style.visibility = 'hidden';
+    showDetails() {
+      this.dialog = true;
     },
   },
 };

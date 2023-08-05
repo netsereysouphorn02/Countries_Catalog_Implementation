@@ -1,6 +1,5 @@
 <template>
   <v-app>
-    <h1>Country Catalog</h1>
     <v-card class="main-card">
       <v-card-title>
         <v-text-field
@@ -14,40 +13,58 @@
         <v-btn text @click="sortByCountryName('asc')">ASC (A-Z) ▲</v-btn>
         <v-btn text @click="sortByCountryName('desc')">DESC (Z-A) ▼</v-btn>
     </v-card>
-
-    <table class="elevation-2 head">
-      <thead>
-        <tr>
-          <th style="width:40px">Image</th>
-          <th> Country Name</th>
-          <th>2 character Country Code</th>
-          <th>3 character Country Code</th>
-          <th>Native Country Name</th>
-          <th>Alternative Country Name</th>
-          <th>Country Calling Codes</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in paginatedCountries" :key="index">
-          <td>
-            <img :src="item.flags.png" :alt="item.name.official" />
-          </td>
-          <td>
-            <FullInfo :item="item"></FullInfo>
-          </td>
-          <td>{{ item.cca2 }}</td>
-          <td>{{ item.cca3 }}</td>
-          <td>{{ item.name.nativeName }}</td>
-          <td>{{ Object.values(item.altSpellings).join(', ') }}</td>
-          <td>{{ item.idd.suffixes }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table class="elevation-2 head">
+        <thead>
+          <tr>
+            <th style="width:40px">Image</th>
+            <th style="width:50px"> Country Name</th>
+            <th>2 character Country Code</th>
+            <th>3 character Country Code</th>
+            <th>Native Country Name</th>
+            <th>Alternative Country Name</th>
+            <th>Country Calling Codes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in paginatedCountries" :key="index">
+            <td>
+              <img :src="item.flags.png" :alt="item.name.official" />
+            </td>
+            <td class="c_name">
+              <FullInfo :item="item"></FullInfo>
+            </td>
+            <td>{{ item.cca2 }}</td>
+            <td>{{ item.cca3 }}</td>
+            <td><pre>{{ JSON.stringify(item.name.nativeName, null, 2) }}</pre></td>
+            <td>{{ Object.values(item.altSpellings).join(', ') }}</td>
+            <td><pre>{{ JSON.stringify(item.idd, null, 2) }}</pre></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <div class="pagination">
-      <button @click="prevPage" :disabled="currentPage === 1">Previous</button>
-      <span>Page {{ currentPage }} of {{ totalPages }}</span>
-      <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
+            <v-btn
+              small
+              color="primary"
+              dark
+              @click="prevPage"
+              :disabled="currentPage === 1"
+            >
+              Previous
+            </v-btn>
+           <p>Page {{ currentPage }} of {{ totalPages }}</p>
+            <v-btn
+              small
+              color="primary"
+              dark
+              @click="nextPage"
+              :disabled="currentPage === totalPages"
+            >
+              Next
+            </v-btn>
+
     </div>
   </v-app>
 </template>
@@ -144,10 +161,20 @@ export default {
   padding: 8px;
   text-align: left;
 }
+  .table-container {
+    overflow-x: auto;
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
 
 .pagination {
-  margin-top: 10px;
+  margin:  30px 0px;
+  display: flex;
+  justify-content: space-evenly;
+}
+.c_name{
   display: flex;
   justify-content: center;
+  text-align: center;
 }
 </style>
