@@ -2,9 +2,9 @@
   <v-dialog v-model="dialog" persistent>
     <template v-slot:activator="{ on, attrs }">
       <v-btn
-        
+        small
         color="#E53935"
-        class="ml-1"
+        class="ml-1 small-button"
         dark
         v-bind="attrs"
         v-on="on"
@@ -13,7 +13,7 @@
         {{ item.name.official }}
       </v-btn>
     </template>
-    <v-card min-height="200">
+    <v-card >
     <v-container class="d-flex justify-right flex-column" style="text-align: left;">
       <div class="align-right">
         <h1>{{ item.name.official }}</h1>
@@ -65,5 +65,8 @@ export default {
 </script>
 
 <style scoped>
-/* Add your custom styles here */
+  .small-button {
+    font-size: 10px;
+    padding: 2px 6px; 
+  }
 </style>

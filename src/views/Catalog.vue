@@ -29,7 +29,7 @@
         <tbody>
           <tr v-for="(item, index) in paginatedCountries" :key="index">
             <td>
-              <img :src="item.flags.png" :alt="item.name.official" />
+              <img :src="item.flags.png" :alt="item.name.official" class="small-image" />
             </td>
             <td class="c_name">
               <FullInfo :item="item"></FullInfo>
@@ -177,4 +177,9 @@ export default {
   justify-content: center;
   text-align: center;
 }
+.small-image {
+  max-width: 100px; 
+  max-height: 100px;
+}
+
 </style>
