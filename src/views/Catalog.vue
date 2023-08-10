@@ -3,11 +3,12 @@
     <v-card class="main-card">
       <v-card-title>
         <v-text-field
-          v-model="search"
+          v-model="searchQuery"
           append-icon="mdi-magnify"
           label="Search Country Name"
           single-line
           hide-details
+          @input="search"
         ></v-text-field>
       </v-card-title>
         <v-btn text @click="sortByCountryName('asc')">ASC (A-Z) ▲</v-btn>
@@ -27,7 +28,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in paginatedCountries" :key="index">
+          <tr v-for="(item, index) in searchResuts" :key="index">
             <td>
               <img :src="item.flags.png" :alt="item.name.official" class="small-image" />
             </td>
@@ -78,14 +79,15 @@ export default {
   components: {
     FullInfo,
   },
+  //declear value and can access in this file
   data() {
     return {
-      search: '',
       tableLoading: true,
       countries: [],
       currentPage: 1,
       itemsPerPage: 25,
       sortOrder: 'asc', // Default sorting order
+      searchQuery: '',
     };
   },
   created() {
@@ -93,11 +95,12 @@ export default {
   },
   computed: {
     filteredCountries() {
-      if (!this.search) return this.countries;
+      // if (!this.search) 
+      return this.countries;
 
-      return fuzzysort.go(this.search, this.countries, {
-        key: 'name.official',
-      }).map((result) => result.obj);
+      // return fuzzysort.go(this.search, this.countries, {
+      //   key: 'name.official',
+      // }).map((result) => result.obj);
     },
     sortedCountries() {
       return this.filteredCountries.slice().sort((a, b) => {
@@ -114,6 +117,33 @@ export default {
       const endIndex = startIndex + this.itemsPerPage;
       return this.sortedCountries.slice(startIndex, endIndex);
     },
+    // searchResults() {
+    //   if (this.searchQuery) {
+    //     return this.paginatedCountries.filter(country => {
+    //       return country.name.official.toLowerCase().includes(this.searchQuery.toLowerCase());
+    //     });
+    //   } else {
+    //     return this.paginatedCountries;
+    //   }
+    // },
+    searchResuts() {
+      if (this.searchQuery) {
+        return this.countries.filter(country =>
+          country.name.official.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
+      } else {
+        return this.paginatedCountries;
+      }
+    },
+    // searchResuts(){
+    //   if (this.search) {
+    //     const sortedProducts = this.countries.filter(country => country.name.official.toString() === this.search);
+    //     return sortedProducts;
+    //   }
+
+    //   return this.paginatedCountries;
+    // }
+    
   },
   methods: {
     async getAllCountries() {
@@ -137,6 +167,9 @@ export default {
     },
     sortByCountryName(order) {
       this.sortOrder = order;
+    },
+    search() {
+      this.currentPage = 1; 
     },
   },
 };
