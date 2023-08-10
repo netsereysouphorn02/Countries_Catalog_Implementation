@@ -88,6 +88,7 @@ export default {
       itemsPerPage: 25,
       sortOrder: 'asc', // Default sorting order
       searchQuery: '',
+      search: '',
     };
   },
   created() {
@@ -95,12 +96,11 @@ export default {
   },
   computed: {
     filteredCountries() {
-      // if (!this.search) 
-      return this.countries;
+      if (!this.search) return this.countries;
 
-      // return fuzzysort.go(this.search, this.countries, {
-      //   key: 'name.official',
-      // }).map((result) => result.obj);
+      return fuzzysort.go(this.search, this.countries, {
+        key: 'name.official',
+      }).map((result) => result.obj);
     },
     sortedCountries() {
       return this.filteredCountries.slice().sort((a, b) => {
